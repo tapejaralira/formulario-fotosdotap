@@ -32,6 +32,7 @@ button {
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
+  margin-top: 20px; /* margem a cima do botao */
 }
 
 button:hover {
