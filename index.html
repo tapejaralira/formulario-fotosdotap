@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formulário - Fotos do Tap</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Agende seu ensaio fotográfico ✨</h1>
+  
+  <form name="contato" method="POST" data-netlify="true" onsubmit="enviarWhatsApp(); return false;">
+    <label>Nome:</label>
+    <input type="text" name="nome" placeholder="Digite seu nome" required><br>
+
+    <label>E-mail:</label>
+    <input type="email" name="email" placeholder="Apenas para login de seleção das fotos" required><br>
+
+    <label>Data e hora desejadas:</label>
+    <input type="text" name="data" placeholder="Previsão de data e hora. Vamos combinar melhor depois!" required><br>
+
+    <label>Tipo de serviço:</label>
+    <textarea name="descricao" placeholder="Descreva o tipo de ensaio ou evento e qualquer outra informação." required></textarea><br>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    function enviarWhatsApp() {
+      const nome = document.querySelector('[name="nome"]').value;
+      const email = document.querySelector('[name="email"]').value;
+      const data = document.querySelector('[name="data"]').value;
+      const descricao = document.querySelector('[name="descricao"]').value;
+
+      const msg = `Olá! Quero agendar um serviço com o Fotos do Tap.%0A
+👉 Nome: ${nome}%0A
+📧 E-mail: ${email}%0A
+📅 Data e hora desejadas: ${data}%0A
+📸 Tipo de serviço: ${descricao}`;
+
+      const link = `https://wa.me/5592991132669?text=${msg}`;
+      window.open(link, "_blank");
+    }
+  </script>
+</body>
+</html>
