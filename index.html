@@ -2,45 +2,161 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário - Fotos do Tap</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 1rem;
+      background-color: #25D366;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      position: relative;
+    }
+
+    button:hover {
+      background-color: #20b455;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 22px;
+      height: 22px;
+      border: 3px solid #fff;
+      border-top: 3px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+    }
+
+    @keyframes spin {
+      0% { transform: translateY(-50%) rotate(0deg); }
+      100% { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem;
+      }
+
+      input, textarea {
+        font-size: 0.95rem;
+      }
+
+      button {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Agende seu ensaio fotográfico ✨</h1>
-  
-  <form name="contato" method="POST" data-netlify="true" onsubmit="enviarWhatsApp(); return false;">
-    <label>Nome:</label>
-    <input type="text" name="nome" placeholder="Digite seu nome" required><br>
 
-    <label>E-mail:</label>
-    <input type="email" name="email" placeholder="Apenas para login de seleção das fotos" required><br>
+  <div class="container">
+    <h2>Entre em Contato</h2>
+    <form id="formulario" onsubmit="enviarWhatsApp(event)">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required placeholder="Como você gostaria de ser chamado? :)">
 
-    <label>Data e hora desejadas:</label>
-    <input type="text" name="data" placeholder="Previsão de data e hora. Vamos combinar melhor depois!" required><br>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="Usado para login na seleção de fotos.">
 
-    <label>Tipo de serviço:</label>
-    <textarea name="descricao" placeholder="Descreva o tipo de ensaio ou evento e qualquer outra informação." required></textarea><br>
+      <label for="descricao">Descrição do Serviço</label>
+      <textarea id="descricao" name="descricao" rows="4" required placeholder="Tipo de ensaio, evento, dúvidas..."></textarea>
 
-    <button type="submit">Enviar</button>
-  </form>
+      <label for="datahora">Data e Hora (previsão)</label>
+      <input type="text" id="datahora" name="datahora" placeholder="Só uma ideia! Vamos ajustar juntos.">
+
+      <button type="submit" id="enviarBtn">
+        Enviar no WhatsApp
+        <div class="loading-spinner" id="spinner"></div>
+      </button>
+    </form>
+  </div>
 
   <script>
-    function enviarWhatsApp() {
-      const nome = document.querySelector('[name="nome"]').value;
-      const email = document.querySelector('[name="email"]').value;
-      const data = document.querySelector('[name="data"]').value;
-      const descricao = document.querySelector('[name="descricao"]').value;
+    function enviarWhatsApp(event) {
+      event.preventDefault();
 
-      const msg = `Olá! Quero agendar um serviço com o Fotos do Tap.%0A
-👉 Nome: ${nome}%0A
-📧 E-mail: ${email}%0A
-📅 Data e hora desejadas: ${data}%0A
-📸 Tipo de serviço: ${descricao}`;
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const descricao = document.getElementById("descricao").value.trim();
+      const datahora = document.getElementById("datahora").value.trim();
 
-      const link = `https://wa.me/5592991132669?text=${msg}`;
-      window.open(link, "_blank");
+      if (!nome || !email || !descricao) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      const mensagem = `Olá! Quero falar sobre um serviço de fotografia 😊
+
+📛 Nome: ${nome}
+📧 Email (para login): ${email}
+📸 Tipo de serviço: ${descricao}
+📅 Data/hora (previsão): ${datahora}`;
+
+      const numero = "5592991132669"; // Seu número do WhatsApp
+      const link = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+
+      // Mostrar o spinner de loading
+      const spinner = document.getElementById("spinner");
+      spinner.style.display = "inline-block";
+
+      // Simula um pequeno tempo antes de redirecionar
+      setTimeout(() => {
+        window.open(link, "_blank");
+        spinner.style.display = "none";
+        document.getElementById("formulario").reset(); // limpa o formulário se quiser
+      }, 1200);
     }
   </script>
+
 </body>
 </html>
