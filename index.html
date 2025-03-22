@@ -116,7 +116,7 @@
       <textarea id="descricao" name="descricao" rows="4" required placeholder="Mensagem, tipo de ensaio, evento, dúvidas..."></textarea>
 
       <label for="datahora">Data (previsão)</label>
-      <input type="text" id="datahora" name="datahora" placeholder="Só uma ideia! Vamos ajustar juntos.">
+      <input type="date" id="datahora" name="datahora" placeholder="Só uma ideia! Vamos ajustar juntos." required>
 
       <button type="submit" id="enviarBtn">
         Enviar no WhatsApp
@@ -126,6 +126,25 @@
   </div>
 
   <script>
+    // Formatar a data no formato dd/mm/aaaa
+    function formatarData() {
+      const dataInput = document.getElementById("datahora");
+      
+      const hoje = new Date();
+      const dia = String(hoje.getDate()).padStart(2, "0");
+      const mes = String(hoje.getMonth() + 1).padStart(2, "0"); // Meses começam de 0
+      const ano = hoje.getFullYear();
+      
+      const dataFormatada = `${ano}-${mes}-${dia}`; // Formato yyyy-mm-dd, que o campo "date" espera.
+      
+      // Define o valor do campo "datahora"
+      dataInput.value = dataFormatada;
+    }
+
+    // Chama a função formatarData ao carregar a página
+    window.onload = formatarData;
+
+    // Ao enviar o formulário, formata a data para o formato desejado (dd/mm/aaaa)
     function enviarWhatsApp(event) {
       event.preventDefault();
 
@@ -139,12 +158,16 @@
         return;
       }
 
+      // Formatar a data para o formato dd/mm/aaaa
+      const dataParts = datahora.split("-");
+      const dataFormatada = `${dataParts[2]}/${dataParts[1]}/${dataParts[0]}`;
+
       const mensagem = `Olá! Quero falar sobre um serviço de fotografia 😊
 
 📛 Nome: ${nome}
 📧 Email (para login): ${email}
 📸 Tipo de serviço: ${descricao}
-📅 Data/hora (previsão): ${datahora}`;
+📅 Data/hora (previsão): ${dataFormatada}`;
 
       const numero = "5592991132669"; // Seu número do WhatsApp
       const link = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
@@ -157,7 +180,7 @@
       setTimeout(() => {
         window.open(link, "_blank");
         spinner.style.display = "none";
-        document.getElementById("formulario").reset(); // limpa o formulário se quiser
+        document.getElementById("formulario").reset(); // Limpa o formulário
       }, 1200);
     }
   </script>
