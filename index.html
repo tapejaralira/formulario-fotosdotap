@@ -187,14 +187,14 @@ Data: ${dataFormatada}`;
       const spinner = document.getElementById("spinner");
       spinner.style.display = "inline-block";
 
-      // Primeiro redireciona para a página de obrigado
-      window.location.replace("https://fotosdotap.netlify.app/obrigado"); // Atualize aqui se necessário
+      // Abrir o WhatsApp
+      window.open(link, "_blank");
 
+      // Redirecionar para a página de "Obrigado" após o envio do WhatsApp
       setTimeout(() => {
-        // Abrir o WhatsApp após o redirecionamento
-        window.open(link, "_blank");
+        window.location.href = "https://fotosdotap.netlify.app/obrigado"; // Atualize aqui se necessário
         spinner.style.display = "none";        
-      }, 1000); // Atraso de 1 segundo antes de abrir o WhatsApp
+      }, 1000); // Atraso de 1 segundo antes de redirecionar
     }
   </script>
 
