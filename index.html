@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulário - Fotos do Tap</title>
 
-  <!-- Tag do Google Analytics 4 -->
+  <!-- Adicionando o código da tag GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z391W16WQ1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-Z391W16WQ1');  // Seu ID do GA4
+    gtag('config', 'G-Z391W16WQ1');
   </script>
 
   <style>
@@ -188,15 +188,15 @@ Data: ${dataFormatada}`;
       spinner.style.display = "inline-block";
 
       setTimeout(() => {
-      // Primeiro redireciona para a página de obrigado
-        window.location.href = "https://www.fotosdotap.com.br/obrigado";
-      
-      // Simula um pequeno tempo antes de redirecionar
-      setTimeout(() => {
-        window.open(link, "_blank");
-        spinner.style.display = "none";        
-      }, 2000);
-    }, 300); // pequeno delay antes de redirecionar para dar tempo do spinner aparecer
+        // Primeiro redireciona para a página de obrigado
+        window.location.href = "https://www.fotosdotap.com.br/obrigado"; // Atualize aqui se necessário
+
+        // Simula um pequeno tempo antes de redirecionar para o WhatsApp
+        setTimeout(() => {
+          window.open(link, "_blank");
+          spinner.style.display = "none";        
+        }, 2000); // Atraso de 2 segundos antes de abrir o WhatsApp
+      }, 300); // Delay pequeno antes de redirecionar para dar tempo do spinner aparecer
     }
   </script>
 
