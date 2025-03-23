@@ -176,12 +176,16 @@ Data: ${dataFormatada}`;
       const spinner = document.getElementById("spinner");
       spinner.style.display = "inline-block";
 
+      setTimeout(() => {
+      // Primeiro redireciona para a página de obrigado
+        window.location.href = "https://www.fotosdotap.com.br/obrigado";
+      
       // Simula um pequeno tempo antes de redirecionar
       setTimeout(() => {
         window.open(link, "_blank");
-        spinner.style.display = "none";
-        document.getElementById("formulario").reset(); // Limpa o formulário
-      }, 1200);
+        spinner.style.display = "none";        
+      }, 2000);
+    }, 300); // pequeno delay antes de redirecionar para dar tempo do spinner aparecer
     }
   </script>
 
