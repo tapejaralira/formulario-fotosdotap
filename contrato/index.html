@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário de Contrato Fotográfico</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+}
+    label {
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    input:invalid {
+      border-color: red;
+    }
+    .readonly {
+      background-color: #eee;
+      color: #555;
+    }
+    .grid-row {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      gap: 1.5rem;
+      align-items: end;
+    }
+    .flex-row {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-end;
+    }
+    .flex-row > div {
+      flex: 1;
+    }
+    .contract-box {
+      max-height: 300px;
+      overflow-y: scroll;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      background: white;
+      margin-bottom: 1rem;
+      white-space: pre-wrap;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0;">
+<script>
+  // Impede envio de campos inválidos e mostra mensagem de erro personalizada
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('form').addEventListener('submit', function (e) {
+      if (!this.checkValidity()) {
+        e.preventDefault();
+        alert('Por favor, preencha todos os campos corretamente antes de enviar.');
+      }
+    });
+  });
+</script>
+
+<!-- VALIDAÇÃO HTML5 PADRÃO EM TODOS OS CAMPOS -->
+<div style="display: flex; justify-content: center; padding: 1rem; margin: 1rem;">
+  <form name="contrato-fotografico" method="POST" data-netlify="true" style="max-width: 600px; width: 100%;">
+  <label>Nome completo:</label>
+  <input type="text" name="nome_completo" required pattern="^[A-Za-zÀ-ÿ'\s]+$" title="Use apenas letras e espaços.">
+
+  <label>CPF:</label>
+  <input type="text" name="cpf" pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$" placeholder="000.000.000-00" required title="Formato: 000.000.000-00">
+  
+  <div class="grid-row">
+    <div>
+      <label>Endereço:</label>
+      <input type="text" name="endereco" required>
+    </div>
+    <div>
+      <label>Número:</label>
+      <input type="text" name="numero" required pattern="^\d+[A-Za-z]?$" title="Somente números ou números com letra (ex: 123 ou 123A)">
+    </div>
+  </div>
+
+  <label>CEP:</label>
+  <input type="text" name="cep" pattern="^\d{5}-\d{3}$" placeholder="00000-000" required title="Formato: 00000-000" >
+
+  <label>Descrição do serviço:</label>
+  <input type="text" name="descricao_servico" id="descricao_servico" class="readonly" readonly>
+
+  <div class="flex-row">
+    <div>
+      <label>Quantidade de fotos:</label>
+      <input type="number" name="quantidade_fotos" id="quantidade_fotos" class="readonly" readonly>
+    </div>
+    <div>
+      <label>Valor:</label>
+      <input type="text" name="valor" id="valor" class="readonly" readonly pattern="^\d+(,\d{2})?$" title="Use números, com vírgula para centavos (ex: 590 ou 590,00)">
+    </div>
+  </div>
+
+  <label>Data da sessão:</label>
+  <input type="text" name="data_sessao" id="data_sessao" class="readonly" readonly pattern="^\d{2}/\d{2}/\d{4}$" placeholder="dd/mm/aaaa" title="Formato: dd/mm/aaaa">
+
+  <label>Local da sessão:</label>
+  <input type="text" name="local_sessao" id="local_sessao" class="readonly" readonly>
+
+  <div class="flex-row">
+    <div>
+      <label>Hora de início:</label>
+      <input type="time" name="hora_inicio" id="hora_inicio" class="readonly" readonly>
+    </div>
+    <div>
+      <label>Hora de término:</label>
+      <input type="time" name="hora_termino" id="hora_termino" class="readonly" readonly>
+    </div>
+  </div>
+
+  <label>Contrato:</label>
+  <div class="contract-box" id="contrato-texto">
+  Carregando contrato personalizado...
+</div>
+
+  <label>
+    <input type="checkbox" name="aceite" required>
+    Li e aceito os termos do contrato acima.
+  </label>
+
+  <button type="submit">Enviar</button>
+</form></div>
+<script>
+function preencherContrato() {
+  const dados = {
+    nome_completo: document.querySelector('[name="nome_completo"]').value || '{{nome_completo}}',
+    endereco: document.querySelector('[name="endereco"]').value || '{{endereco}}',
+    numero: document.querySelector('[name="numero"]').value || '{{numero}}',
+    cep: document.querySelector('[name="cep"]').value || '{{cep}}',
+    cpf: document.querySelector('[name="cpf"]').value || '{{cpf}}',
+    descricao_servico: document.getElementById('descricao_servico').value || '{{descricao_servico}}',
+    valor: document.getElementById('valor').value || '{{valor}}',
+    data_sessao: document.getElementById('data_sessao').value || '{{data_sessao}}',
+    local_sessao: document.getElementById('local_sessao').value || '{{local_sessao}}',
+    quantidade_fotos: document.getElementById('quantidade_fotos').value || '{{quantidade_fotos}}',
+    hora_inicio: document.getElementById('hora_inicio').value || '{{hora_inicio}}',
+    hora_termino: document.getElementById('hora_termino').value || '{{hora_termino}}'
+  };
+
+  const contrato = `CONTRATO DE PRESTAÇÃO DE SERVIÇOS FOTOGRÁFICOS
+
+Pelo presente instrumento particular, de um lado, Tapejara Lira Iung, fotógrafo profissional, residente em Rua Rio dos Sinos, 27, Cidade Nova, Cep 69090-641, Manaus-AM, portador do CPF nº 933.397.472-53, doravante denominado CONTRATADO, e de outro lado, ${dados.nome_completo}, residente em ${dados.endereco}, nº ${dados.numero}, Cep ${dados.cep}, portador do CPF nº ${dados.cpf}, doravante denominado CONTRATANTE, têm entre si, justas e contratadas, as disposições descritas a seguir:
+
+CLÁUSULA PRIMEIRA – DO OBJETO
+O CONTRATADO se compromete a prestar ao CONTRATANTE o serviço de ${dados.descricao_servico} no dia ${dados.data_sessao}, no local ${dados.local_sessao}, onde foram contratadas inicialmente ${dados.quantidade_fotos} imagens editadas, de acordo com as especificações deste contrato.
+
+CLÁUSULA SEGUNDA – DA PRESTAÇÃO DE SERVIÇOS
+1. O CONTRATADO obriga-se a prestar os serviços com a máxima qualidade e com equipamentos condizentes com a natureza do trabalho.
+2. O CONTRATADO deverá estar no local acordado às ${dados.hora_inicio} horas do dia da execução do trabalho e permanecerá até às ${dados.hora_termino} do mesmo dia.
+3. O CONTRATANTE compromete-se a fornecer para o CONTRATADO informações adicionais que sejam relevantes para o bom cumprimento do trabalho.
+4. Caso o CONTRATADO não possa realizar o serviço por motivos de força maior, o CONTRATADO fica responsável por informar o ocorrido ao CONTRATANTE em um prazo de, no mínimo, 48 horas, sem causar danos ao CONTRATANTE, e enviar outro profissional igualmente capacitado.
+
+CLÁUSULA TERCEIRA – DOS PAGAMENTOS
+1. O valor do pacote dos serviços foi acordado previamente entre as partes em ${dados.valor}.
+2. Será exigido o pagamento de 50% (cinquenta por cento) do valor total no ato do agendamento da data, a título de sinal e reserva.
+3. Os 50% (cinquenta por cento) restantes deverão ser pagos após a seleção das fotos pelo CONTRATANTE, antes da entrega final dos arquivos.
+4. Será cobrado R$ 40,00 (quarenta reais) por hora extra, caso haja necessidade de permanecer no local por mais tempo do que o acordado.
+5. O CONTRATANTE poderá adquirir fotos adicionais além da quantidade contratada, mediante o pagamento de R$ 9,90 (nove reais e noventa centavos) por imagem extra.
+   5.1. O pagamento pelas fotos extras deverá ser realizado juntamente com o valor restante, antes da entrega final dos arquivos.
+
+CLÁUSULA QUARTA – DO REAGENDAMENTO
+1. O reagendamento poderá ser solicitado com até 7 (sete) dias de antecedência da data agendada, e será possível dentro do prazo de 30 (trinta) dias subsequentes à data original, conforme disponibilidade da agenda do CONTRATADO.
+2. O CONTRATADO se compromete a remarcar a sessão em caso de imprevistos climáticos ou de força maior, mediante comum acordo com o CONTRATANTE.
+
+CLÁUSULA QUINTA– DA ENTREGA DAS FOTOS
+1. O CONTRATADO terá o prazo de 2 (dois) dias úteis para enviar, por meio de link, as amostras de fotos para seleção.
+2. O CONTRATANTE terá o prazo de 7 (sete) dias corridos para concluir a seleção das fotos.
+3. Após a conclusão da seleção das fotos contratadas, serão entregues em formato digital, por meio de link para download, respeitando o prazo de 7 (sete) dias úteis e a quantidade previamente acordada entre as partes.
+4. O CONTRATANTE terá o prazo máximo de 3 (três) dias corridos, contados a partir da disponibilização do link, para realizar o download e armazenamento das imagens.
+
+CLÁUSULA SEXTA – DOS DIREITOS DE USO DE IMAGEM
+O CONTRATADO reserva-se o direito de utilizar algumas imagens realizadas durante a prestação dos serviços para fins de portfólio e divulgação em redes sociais, site ou material promocional, preservando a integridade e o respeito à imagem do CONTRATANTE.
+
+CLÁUSULA SÉTIMA– DAS DISPOSIÇÕES GERAIS
+1. Caso haja necessidade de alimentação e transporte não inclusos neste documento, o CONTRATADO reserva-se o direito de repassar estes valores para a CONTRATANTE.
+2. Caso haja um atraso superior a uma hora, o CONTRATADO estará desobrigado de cumprir os serviços estabelecidos neste documento.
+3. O CONTRATADO compromete-se, na medida do possível, a atender às solicitações do CONTRATANTE. Entretanto, não poderá assegurar o registro de nenhuma imagem específica.
+
+CLÁUSULA OITAVA – DA RESCISÃO CONTRATUAL
+1. Em caso de rescisão contratual, a parte a rescindir o acordo deve comunicar a outra por escrito com até 7 (sete) dias antes da data da execução do trabalho.
+   1.1. Em caso de rescisão por parte do CONTRATANTE, o valor do sinal não será devolvido.
+
+Fica eleito o foro da comarca de Manaus/AM, com exclusão de qualquer outro, por mais privilegiado que seja, para serem dirimidas quaisquer dúvidas provenientes deste contrato.
+
+Este contrato é considerado aceito e válido mediante o preenchimento e envio do formulário eletrônico disponibilizado pelo CONTRATADO, contendo os dados do CONTRATANTE e a confirmação de leitura e concordância com os termos estabelecidos neste documento.`;
+
+  document.getElementById('contrato-texto').innerText = contrato;
+}
+
+window.addEventListener('DOMContentLoaded', preencherContrato);
+document.querySelectorAll('input').forEach(input => input.addEventListener('input', preencherContrato));
+</script>
+</body>
+</html>
