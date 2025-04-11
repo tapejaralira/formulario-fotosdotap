@@ -137,10 +137,31 @@
     <input type="checkbox" name="aceite" required>
     Li e aceito os termos do contrato acima.
   </label>
+  
+  <p id="mensagem-status" style="display: none; text-align: center; font-weight: bold; color: #007bff;">
+    Enviando contrato, por favor aguarde...
+  </p>  
 
   <button type="submit">Enviar</button>
 </form></div>
+
 <script>
+function preencherCamposDaURL() {
+  const params = new URLSearchParams(window.location.search);
+  const campos = [
+    'descricao_servico', 'quantidade_fotos', 'valor',
+    'data_sessao', 'local_sessao', 'hora_inicio', 'hora_termino'
+  ];
+
+  campos.forEach(campo => {
+    const valor = params.get(campo);
+    if (valor !== null) {
+      const input = document.getElementById(campo);
+      if (input) input.value = decodeURIComponent(valor);
+    }
+  });
+}
+
 function preencherContrato() {
   const dados = {
     nome_completo: document.querySelector('[name="nome_completo"]').value || '{{nome_completo}}',
@@ -207,8 +228,18 @@ Este contrato é considerado aceito e válido mediante o preenchimento e envio d
   document.getElementById('contrato-texto').innerText = contrato;
 }
 
-window.addEventListener('DOMContentLoaded', preencherContrato);
+window.addEventListener('DOMContentLoaded', () => {
+  preencherCamposDaURL();
+  preencherContrato();
+});
 document.querySelectorAll('input').forEach(input => input.addEventListener('input', preencherContrato));
+
+// Mostra mensagem de carregamento ao enviar
+document.querySelector('form').addEventListener('submit', function () {
+  document.getElementById('mensagem-status').style.display = 'block';
+  this.querySelector('button[type="submit"]').style.display = 'none';
+});
+
 </script>
 </body>
 </html>
